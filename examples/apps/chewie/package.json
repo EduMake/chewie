@@ -1,0 +1,17 @@
+{
+	"name": "airportinfo",
+	"version": "1.0.0",
+	"description": "track FAA Airport status",
+	"main": "index.js",
+	"scripts": {
+		"start": "node examples/apps/faa-info/index.js"
+	},
+	"author": "josh skeen",
+	"license": "ISC",
+	"dependencies": {
+		"alexa-app": "^2.3.2",
+		"lodash": "^4.3.0",
+		"request-promise": "^2.0.0",
+		"node-wikia": "^0.0.3"
+	}
+}
