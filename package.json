@@ -15,7 +15,6 @@
 		"express": "~4.0.0",
 		"hotswap": "^1.1.0",
 		"lodash": "^4.3.0",
-		"request-promise": "^2.0.0",
-		"node-wikia": "^0.0.3"
+		"request-promise": "^2.0.0"
 	}
 }

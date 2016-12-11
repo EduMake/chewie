@@ -1,12 +1,12 @@
 {
-	"name": "airportinfo",
+	"name": "chewie",
 	"version": "1.0.0",
-	"description": "track FAA Airport status",
+	"description": "Get Wookiepeedia Info",
 	"main": "index.js",
 	"scripts": {
-		"start": "node examples/apps/faa-info/index.js"
+		"start": "node examples/apps/chewie/index.js"
 	},
-	"author": "josh skeen",
+	"author": "Martyn Eggleton",
 	"license": "ISC",
 	"dependencies": {
 		"alexa-app": "^2.3.2",
