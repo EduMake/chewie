@@ -3,10 +3,10 @@ module.change_code = 1;
 var _ = require('lodash');
 var Alexa = require('alexa-app');
 var app = new Alexa.app('chewie');
-var FAADataHelper = require('./faa_data_helper');
+var WikiaHelper = require('./wikia_helper');
 
 app.launch(function(req, res) {
-  var prompt = 'For delay information, tell me an Airport code.';
+  var prompt = 'What tell you I can?.';
   res.say(prompt).reprompt(prompt).shouldEndSession(false);
 });
 
@@ -23,20 +23,57 @@ app.intent('SearchIntent', {
 },
   function(req, res) {
     //get the slot
-    var airportCode = req.slot('AIRPORTCODE');
-    var reprompt = 'Tell me an airport code to get delay information.';
-    if (_.isEmpty(airportCode)) {
-      var prompt = 'I didn\'t hear an airport code. Tell me an airport code.';
+    var sSubject = req.slot('Text');
+    var reprompt = 'What can chewie find for you.';
+    if (_.isEmpty(oSubject)) {
+      var prompt = 'I didn\'t hear that. Tell me what I can find for you.';
       res.say(prompt).reprompt(reprompt).shouldEndSession(false);
       return true;
     } else {
-      var faaHelper = new FAADataHelper();
-      faaHelper.requestAirportStatus(airportCode).then(function(airportStatus) {
-        console.log(airportStatus);
-        res.say(faaHelper.formatAirportStatus(airportStatus)).send();
+      var oWikiaHelper = new WikiaHelper('starwars');
+      oWikiaHelper.getSearchList(sSubject).then(function(oResult) {
+        console.log(oResult);
+        res.say(oWikiaHelper.formatSearchResult(oResult)).send();
       }).catch(function(err) {
         console.log(err.statusCode);
-        var prompt = 'I didn\'t have data for an airport code of ' + airportCode;
+        var prompt = 'I could not find the droid you are looking for.';
+         //https://github.com/matt-kruse/alexa-app/blob/master/index.js#L171
+        res.say(prompt).reprompt(reprompt).shouldEndSession(false).send();
+      });
+      return false;
+    }
+  }
+);
+
+
+app.intent('SummaryIntent', {
+  'slots': {
+    'Page': 'LIST_OF_PAGES'
+  },
+  'utterances': [
+    'describe {Page}',
+    'describe a {Page}',
+    'tell me about {Page}',
+    'who is {Page}',
+    'what is {Page}'
+    ]
+},
+  function(req, res) {
+    //get the slot
+    var sSubject = req.slot('Text');
+    var reprompt = 'What can chewie find for you.';
+    if (_.isEmpty(oSubject)) {
+      var prompt = 'I didn\'t hear that. Tell me what I can find for you.';
+      res.say(prompt).reprompt(reprompt).shouldEndSession(false);
+      return true;
+    } else {
+      var oWikiaHelper = new WikiaHelper('starwars');
+      oWikiaHelper.getArticleDetails(sSubject).then(function(oResult) {
+        console.log(oResult);
+        res.say(oWikiaHelper.formatPageResult(oResult)).send();
+      }).catch(function(err) {
+        console.log(err.statusCode);
+        var prompt = 'I could not find the droid you are looking for.';
          //https://github.com/matt-kruse/alexa-app/blob/master/index.js#L171
         res.say(prompt).reprompt(reprompt).shouldEndSession(false).send();
       });
